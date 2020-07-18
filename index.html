@@ -29,7 +29,7 @@
       }
 
       #description {
-        flex-basis: 30rem;
+        flex-basis: 20rem;
         padding: 2rem;
         overflow-y: auto;
         border-right: 1px solid #eee;
@@ -101,12 +101,18 @@
     </div>
     <div id='map' ></div>
     <script>
+
+    var bounds = [
+    -82.89589088106914,42.48786045666631,-83.30285856757622,42.23283931154023
+    ];
+
     mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGgiLCJhIjoiY2tjcnRvaDJwMGJkYjJxcDd5dHQ3cm0yNSJ9.AkEAGJl0LKe-6WCeCtQleg';
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/matth/ckcrtqxzf15i11io3e5xh2j66', // stylesheet location
-      center: [-83.079259, 42.364696], // starting position [lng, lat]
-      zoom: 9 // starting zoom
+      // center: [-83.079259, 42.364696], // starting position [lng, lat]
+      // zoom: 9 // starting zoom
+      bounds: bounds,
     });
 
     map.on('load', function() {
