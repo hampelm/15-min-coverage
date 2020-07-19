@@ -7,6 +7,8 @@
     <script src='buffered.geojson'></script>
     <script src='routes.geojson'></script>
     <script src='detroit.geojson'></script>
+    <script src='dissolved.geojson'></script>
+    <script src='yellowzone.geojson'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
     <style>
@@ -116,26 +118,21 @@
     });
 
     map.on('load', function() {
-      // Add Detroit outline
-      map.addSource('detroit', {
-        'type': 'geojson',
-        'data': detroit
-      });
-      map.addLayer({
-        'id': 'detroit',
-        'type': 'line',
-        'source': 'detroit',
-        'layout': {},
-        'paint': {
-        'line-color': '#002828',
-        'line-width': 3
-        }
-      });
+
+      var layers = map.getStyle().layers;
+      // Find the index of the first symbol layer in the map style
+      var firstSymbolId;
+      for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+      firstSymbolId = layers[i].id;
+      break;
+      }
+      }
 
       // Add the buffered routes
       map.addSource('buffered', {
         'type': 'geojson',
-        'data': buffered
+        'data': dissolved
       });
       map.addLayer({
         'id': 'buffered',
@@ -144,9 +141,9 @@
         'layout': {},
         'paint': {
         'fill-color': '#088',
-        'fill-opacity': 1
+        'fill-opacity': 0.4
         }
-      });
+      }, firstSymbolId);
 
       // Add all routes
       map.addSource('routes', {
@@ -162,10 +159,40 @@
         'line-color': '#088',
         'line-width': 1
         }
+      }, firstSymbolId);
+
+      // Mark the danger area
+      map.addSource('yellowzone', {
+        'type': 'geojson',
+        'data': yellowzone
       });
+      map.addLayer({
+        'id': 'yellowzone',
+        'type': 'fill',
+        'source': 'yellowzone',
+        'layout': {},
+        'paint': {
+        'fill-color': '#FAF089',
+        'fill-opacity': 0.4
+        }
+      }, firstSymbolId);
 
 
-
+      // Add Detroit outline
+      map.addSource('detroit', {
+        'type': 'geojson',
+        'data': detroit
+      });
+      map.addLayer({
+        'id': 'detroit',
+        'type': 'line',
+        'source': 'detroit',
+        'layout': {},
+        'paint': {
+        'line-color': '#2C7A7B',
+        'line-width': 2
+        }
+      }, firstSymbolId);
 
     })
 
